@@ -1,8 +1,0 @@
-#config file
-ihg/settings.py
-
-#compiled file
-*.pyc
-
-#migration
-xetal/migrations/*
