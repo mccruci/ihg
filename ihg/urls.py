@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^xetal/', include('xetal.urls'))
 ]
-app = Kinsei('Marco')
-app.stampa()
+#app = Kinsei('Marco')
+#app.stampa()

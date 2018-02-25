@@ -1,6 +1,43 @@
 from django.db import models
 
 # Create your models here.
+"""
+oggetto Mappa
+coordinate -> mappa             |-> Stanza -> Reparto -> Edificio
+           |-> mappa_allarme    |-^
+"""
+
+class Coordinate(models.Model):
+    """
+    modello coordinate per mappe
+    CODICE = crd
+    """
+    crd_cod = models.AutoField(primary_key=True)
+    crd_I = models.CharField(max_length=60)
+    crd_X = models.CharField(max_length=60)
+    crd_XY = models.CharField(max_length=60)
+    crd_Y = models.CharField(max_length=60)
+
+class Mappa(models.Model):
+    """
+    CODICE = mpp
+    """
+    TIPO_USO = (
+        ('M', 'Mappa_Stanza'),
+        ('A','Allarme_Stanza'),
+    )
+    mpp_cod = models.AutoField(primary_key=True)
+    mpp_uso = models.CharField(max_length=1, choices=TIPO_USO)
+    mpp_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
+
+class Device(models.Model):
+    """
+    CODICE = dev
+    """
+    dev_cod = models.AutoField(primary_key=True)
+    dev_ip = models.CharField(max_length=100)
+    dev_mpp = models.ForeignKey(Mappa, on_delete=models.CASCADE)
+
 class Sito(models.Model):
     """
     CODICE = sti
@@ -51,6 +88,9 @@ class Stanza(models.Model):
     stz_rpt_cod = models.ForeignKey(Reparto, on_delete=models.CASCADE)
     stz_numero = models.IntegerField()
     stz_uso = models.CharField(max_length=1, choices=TIPO_USO)
+    stz_mpp_cod = models.ForeignKey(Mappa, on_delete=models.CASCADE, null=True)
+
+
 
 class Letto(models.Model):
     """
