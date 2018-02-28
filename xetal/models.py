@@ -1,43 +1,9 @@
 from django.db import models
 
 # Create your models here.
-"""
-oggetto Mappa
-coordinate -> mappa             |-> Stanza -> Reparto -> Edificio
-           |-> mappa_allarme    |-^
-"""
-
-class Coordinate(models.Model):
-    """
-    modello coordinate per mappe
-    CODICE = crd
-    """
-    crd_cod = models.AutoField(primary_key=True)
-    crd_I = models.CharField(max_length=60)
-    crd_X = models.CharField(max_length=60)
-    crd_XY = models.CharField(max_length=60)
-    crd_Y = models.CharField(max_length=60)
-
-class Mappa(models.Model):
-    """
-    CODICE = mpp
-    """
-    TIPO_USO = (
-        ('M', 'Mappa_Stanza'),
-        ('A','Allarme_Stanza'),
-    )
-    mpp_cod = models.AutoField(primary_key=True)
-    mpp_uso = models.CharField(max_length=1, choices=TIPO_USO)
-    mpp_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
-
-class Device(models.Model):
-    """
-    CODICE = dev
-    """
-    dev_cod = models.AutoField(primary_key=True)
-    dev_ip = models.CharField(max_length=100)
-    dev_mpp = models.ForeignKey(Mappa, on_delete=models.CASCADE)
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""          DEFINIZIONE SITO                            """
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 class Sito(models.Model):
     """
     CODICE = sti
@@ -71,7 +37,7 @@ class Reparto(models.Model):
     CODICE = rpt
     """
     rpt_cod = models.AutoField(primary_key=True)
-    rpt_spd_cod = models.ForeignKey(Piano, on_delete=models.CASCADE)
+    rpt_spd_cod = models.ForeignKey(Edificio, on_delete=models.CASCADE)
     rpt_nome = models.CharField(max_length=100)
 
 class Stanza(models.Model):
@@ -88,9 +54,7 @@ class Stanza(models.Model):
     stz_rpt_cod = models.ForeignKey(Reparto, on_delete=models.CASCADE)
     stz_numero = models.IntegerField()
     stz_uso = models.CharField(max_length=1, choices=TIPO_USO)
-    stz_mpp_cod = models.ForeignKey(Mappa, on_delete=models.CASCADE, null=True)
-
-
+    #stz_mpp_cod = models.ForeignKey(Mappa, on_delete=models.CASCADE, null=True)
 
 class Letto(models.Model):
     """
@@ -102,3 +66,72 @@ class Letto(models.Model):
     #ltt_pzt_cod = collegamento a paziente
     #aggiunta da verificare
     ltt_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""          DEFINIZIONE DEVICE E MAPPE                  """
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Coordinate(models.Model):
+    """
+    modello coordinate per mappe
+    CODICE = crd
+    """
+    crd_cod = models.AutoField(primary_key=True)
+    crd_I = models.CharField(max_length=60)
+    crd_X = models.CharField(max_length=60)
+    crd_XY = models.CharField(max_length=60)
+    crd_Y = models.CharField(max_length=60)
+
+class Mappa(models.Model):
+    """
+    CODICE = mpp
+    """
+    mpp_cod = models.AutoField(primary_key=True)
+    #mpp_uso = models.CharField(max_length=1, )
+    mpp_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+    mpp_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
+
+class Zone(models.Model):
+    """
+    CODICE zno
+    """
+    TIPO_ZONA=(
+        ('L','Letto'),
+        ('B', 'Bagno'),
+        ('P', 'Porta'),
+        ('S', 'Stanza'),
+    )
+    zno_cod = models.AutoField(primary_key=True)
+    zno_tipo = models.CharField(max_length=1, choices=TIPO_ZONA)
+    zno_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+    zno_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
+
+class Device(models.Model):
+    """
+    CODICE = dev
+    """
+    dev_cod = models.AutoField(primary_key=True)
+    dev_ip = models.CharField(max_length=100)
+    dev_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+    dev_soglia_allarme_n_persone = models.CharField(max_length=10)
+
+class CoordinatePersone(models.Model):
+    """
+    CODICE =cpr
+    """
+    cpr_cod = models.AutoField(primary_key=True)
+    cpr_dev_cod = models.ForeignKey(Device, on_delete=models.CASCADE)
+    cpr_time = models.DateTimeField()
+    cpr_persone = models.CharField(max_length=10)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""          DEFINIZIONE ALLARMI                         """
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Allarme_zona(models.Model):
+    """
+    CODICE = all
+    """
+    all_cod = models.AutoField(primary_key=True)
+    all_zno_cod = models.OneToOneField(Zone, on_delete=models.CASCADE)
+    all_inizio_allarme = models.TimeField()
+    all_fine_allarme = models.TimeField()
+    all_numero_max_persone = models.IntegerField(max_length=2)

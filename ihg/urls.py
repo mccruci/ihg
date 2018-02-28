@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from kinsei.kinsei import Kinsei
+#from kinsei.kinsei import Kinsei
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
