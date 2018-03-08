@@ -63,48 +63,6 @@ class Stanza(models.Model):
     stz_uso = models.CharField(max_length=1, choices=TIPO_USO)
     #stz_mpp_cod = models.ForeignKey(Mappa, on_delete=models.CASCADE, null=True)
 
-class Ambiente(models.Model):
-    """
-    collegato a + zone ed a un Device
-    CODICE = amb
-    """
-    TIPO_AMB=(
-            ('F','Finestra'),
-            ('B','Bagno'),
-            ('L','Letto'),
-            )
-    amb_cod = models.AutoField(primary_key=True)
-    amb_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
-    amb_tipo = models.CharField(max_length=1, choices=TIPO_AMB)
-
-class Device(models.Model):
-    """
-    CODICE = dev
-    """
-    dev_cod = models.AutoField(primary_key=True)
-    dev_ip = models.CharField(max_length=100)
-    dev_stz_cod = models.ForeignKey(Ambiente, on_delete=models.CASCADE)
-    dev_soglia_allarme_n_persone = models.CharField(max_length=10)
-
-class Zone(models.Model):
-    """
-    CODICE zno
-    """
-    TIPO_ZONA=(
-        ('L','Letto'),
-        ('B', 'Bagno'),
-        ('P', 'Porta'),
-        ('S', 'Stanza'),
-    )
-    zno_cod = models.AutoField(primary_key=True)
-    zno_tipo = models.CharField(max_length=1, choices=TIPO_ZONA)
-    zno_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
-    #zno_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
-    zno_asse0 = models.CharField(max_length=40)
-    zno_asseX = models.CharField(max_length=40)
-    zno_asseXY = models.CharField(max_length=40)
-    zno_asseY = models.CharField(max_length=40)
-
 class Letto(models.Model):
     """
     CODICE = dfc
@@ -139,8 +97,43 @@ class Mappa(models.Model):
     mpp_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
     mpp_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
 
+class Ambiente(models.Model):
+    """
+    collegato a + zone ed a un Device
+    CODICE = amb
+    """
+    TIPO_AMB=(
+            ('F','Finestra'),
+            ('B','Bagno'),
+            ('L','Letto'),
+            )
+    amb_cod = models.AutoField(primary_key=True)
+    amb_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+    amb_tipo = models.CharField(max_length=1, choices=TIPO_AMB)
 
+class Zone(models.Model):
+    """
+    CODICE zno
+    """
+    TIPO_ZONA=(
+        ('L','Letto'),
+        ('B', 'Bagno'),
+        ('P', 'Porta'),
+        ('S', 'Stanza'),
+    )
+    zno_cod = models.AutoField(primary_key=True)
+    zno_tipo = models.CharField(max_length=1, choices=TIPO_ZONA)
+    zno_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+    zno_crd_cod = models.ForeignKey(Coordinate, on_delete=models.CASCADE)
 
+class Device(models.Model):
+    """
+    CODICE = dev
+    """
+    dev_cod = models.AutoField(primary_key=True)
+    dev_ip = models.CharField(max_length=100)
+    dev_stz_cod = models.ForeignKey(Stanza, on_delete=models.CASCADE)
+    dev_soglia_allarme_n_persone = models.CharField(max_length=10)
 
 class Persone(modelf.Model):
     """
