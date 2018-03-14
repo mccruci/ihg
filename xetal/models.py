@@ -8,8 +8,8 @@ class Ospedale(models.Model):
     """
     CODICE = osp
     """
-    osp_cod = model.AutoField(primary_key=True)
-    osp_societa = model.CharField(max_length=100)
+    osp_cod = models.AutoField(primary_key=True)
+    osp_societa = models.CharField(max_length=100)
 
 class Sito(models.Model):
     """
