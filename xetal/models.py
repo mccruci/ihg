@@ -46,10 +46,10 @@ class Mappa(models.Model):
     definizione coordinate
     """
     mpp_cod = models.AutoField(primary_key=True)
-    mpp_asse0 = models.CharField()
-    mpp_asseX = models.CharField()
-    mpp_asseY = models.CharField()
-    mpp_asseXY = models.CharField()
+    mpp_asse0 = models.CharField(max_length=100)
+    mpp_asseX = models.CharField(max_length=100)
+    mpp_asseY = models.CharField(max_length=100)
+    mpp_asseXY = models.CharField(max_length=100)
 
 class Stanza(models.Model):
     """
@@ -86,7 +86,7 @@ class Device(models.Model):
         ('W','WiFi'),
     )
     dev_cod = models.AutoField(primary_key=True)
-    dev_ip = models.CharField()
+    dev_ip = models.CharField(max_length=100)
     dev_amb_cod = models.ForeignKey(Ambiente, on_delete=models.CASCADE)
     dev_tipo = models.CharField(max_length=1, choices=TIPO_DEVICE)
     dev_mappa = models.OneToOneField(Mappa, on_delete=models.CASCADE)
@@ -138,10 +138,10 @@ class CoordinatePersone(models.Model):
     CODICE = cpr
     """
     cpr_cod = models.AutoField(primary_key=True)
-    cpr_asse0 = models.CharField()
-    cpr_asseX = models.CharField()
-    cpr_asseY = models.CharField()
-    cpr_asseXY = models.CharField()
+    cpr_asse0 = models.CharField(max_length=100)
+    cpr_asseX = models.CharField(max_length=100)
+    cpr_asseY = models.CharField(max_length=100)
+    cpr_asseXY = models.CharField(max_length=100)
 
 class Allarme(models.Model):
     """
@@ -152,6 +152,6 @@ class Allarme(models.Model):
     all_tmp = models.DateTimeField()
     all_cpr_cod = models.ForeignKey(CoordinatePersone, on_delete=models.CASCADE)
     all_zno_cod = models.ForeignKey(Zone, on_delete=models.CASCADE)
-    
+
 
 
